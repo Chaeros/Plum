@@ -39,13 +39,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests() // 리퀘스트에 대한 사용권한 체크
-                .antMatchers("/sign-api/sign-in", "/sign-api/sign-up",
-                        "/sign-api/exception","/login","/hello").permitAll() // 가입 및 로그인 주소는 허용
-                .antMatchers(HttpMethod.GET, "/product/**").permitAll() // product로 시작하는 Get 요청은 허용
-                .antMatchers(HttpMethod.GET, "/hello2").permitAll() // test용으로 넣음
-                .antMatchers("**exception**").permitAll()
-
-                .anyRequest().hasRole("ADMIN") // 나머지 요청은 인증된 ADMIN만 접근 가능
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
+                .anyRequest().permitAll() // 나머지 요청 모두 접근 가능
 
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
@@ -64,7 +60,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity webSecurity) {
-        webSecurity.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**",
-                "/swagger-ui.html", "/webjars/**", "/swagger/**", "/sign-api/exception");
+        webSecurity.ignoring().antMatchers("/sign-api/exception");
     }
 }
