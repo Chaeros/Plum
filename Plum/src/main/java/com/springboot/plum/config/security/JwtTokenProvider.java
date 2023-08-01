@@ -72,9 +72,9 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         String token = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
+                .setClaims(claims) // 정보 저장
+                .setIssuedAt(now) // 토큰이 발급된 시간
+                .setExpiration(new Date(now.getTime() + tokenValidMillisecond)) // 토큰의 만료시간
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
 
