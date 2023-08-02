@@ -12,10 +12,10 @@ import java.util.HashMap;
 public class UserController {
 
     @PostMapping(value = "/announce", consumes="application/json;")
-    public String signIn(@RequestBody HashMap<String, Object> map){
+    public HashMap<String, Object> signIn(@RequestBody HashMap<String, Object> map){
         String data1=(String)map.get("data1");
         String data2=(String)map.get("data2");
         System.out.println(data1 + " " + data2);
-        return "success";
+        return map;
     }
 }

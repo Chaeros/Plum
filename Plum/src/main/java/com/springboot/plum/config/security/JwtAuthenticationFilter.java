@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,8 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest servletRequest,
                                     HttpServletResponse servletResponse,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String jwt =getJwtFromRequest(servletRequest);
-        System.out.println(servletRequest.getCookies());
+        String token2 = jwtTokenProvider.resolveToken(servletRequest);
+        String jwt =servletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println("jwt="+jwt);
         System.out.println(servletRequest.getHeader("Authorization"));
         String token = jwtTokenProvider.resolveToken(servletRequest);
         LOGGER.info("[doFilterInternal] token 값 추출 완료. token : {}", token);
