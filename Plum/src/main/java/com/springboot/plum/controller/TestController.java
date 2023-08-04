@@ -27,6 +27,18 @@ public class TestController {
         return testDto;
     }
 
+    @PostMapping(value = "/test", consumes="application/json;")
+    public TestDto test(@RequestBody HashMap<String, Object> map){
+        System.out.println(map);
+        //System.out.println(map.get("aaa"));
+//        JSONParser parser = new JSONParser();
+//        Object obj = parser.parse(map);
+        JSONObject jsonObj = new JSONObject(map);
+        System.out.println("header="+(String)jsonObj.get("header"));
+        TestDto testDto =new TestDto("park","1234");
+        return testDto;
+    }
+
     @GetMapping(value = "/hello2")
     public String hello(){
         System.out.println("hi");

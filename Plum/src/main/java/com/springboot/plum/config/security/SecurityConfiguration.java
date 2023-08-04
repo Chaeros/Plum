@@ -29,8 +29,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.httpBasic().disable() // REST API는 UI를 사용하지 않으므로 기본설정을 비활성화
-
+        httpSecurity.cors().and() // cors 활성화
+                .httpBasic().disable() // REST API는 UI를 사용하지 않으므로 기본설정을 비활성화
                 .csrf().disable() // REST API는 csrf 보안이 필요 없으므로 비활성화
 
                 .sessionManagement()
@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * Swagger 페이지 접근에 대한 예외 처리
      *
-     * @param webSecurity
+     * @param webSecurit
      */
     @Override
     public void configure(WebSecurity webSecurity) {
