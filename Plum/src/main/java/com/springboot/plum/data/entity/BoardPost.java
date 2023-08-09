@@ -26,6 +26,9 @@ public class BoardPost {
     @OneToMany(mappedBy = "boardPost" , cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "attachment", cascade = CascadeType.ALL)
+    private List<Attachment> attachments = new ArrayList<>();
+
     private String subject;
 
     private String content;
