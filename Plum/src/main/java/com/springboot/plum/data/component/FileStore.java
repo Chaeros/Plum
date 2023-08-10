@@ -2,6 +2,7 @@ package com.springboot.plum.data.component;
 
 import com.springboot.plum.data.entity.Attachment;
 import com.springboot.plum.data.entity.AttachmentType;
+import com.springboot.plum.data.entity.BoardPost;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.stereotype.Component;
@@ -19,18 +20,20 @@ public class FileStore {
     //@Value("${file.dir}/")
     private String fileDirPath=new String("D:/SpringProject/files2/");
 
-    public List<Attachment> storeFiles(List<MultipartFile> multipartFiles, AttachmentType attachmentType) throws IOException {
+    public List<Attachment> storeFiles(List<MultipartFile> multipartFiles, AttachmentType attachmentType,
+                                       BoardPost boardPost) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
-                attachments.add(storeFile(multipartFile, attachmentType));
+                attachments.add(storeFile(multipartFile, attachmentType, boardPost));
             }
         }
 
         return attachments;
     }
 
-    public Attachment storeFile(MultipartFile multipartFile, AttachmentType attachmentType) throws IOException {
+    public Attachment storeFile(MultipartFile multipartFile, AttachmentType attachmentType,
+                                BoardPost boardPost) throws IOException {
         if (multipartFile.isEmpty()) {
             return null;
         }
@@ -44,6 +47,7 @@ public class FileStore {
                 .originFilename(originalFilename)
                 .storeFilename(storeFilename)
                 .attachmentType(attachmentType)
+                .boardPost(boardPost)
                 .build();
     }
 

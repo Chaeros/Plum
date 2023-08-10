@@ -69,7 +69,7 @@ public class UserController {
     public Map<String,Object> AxiosFileTest (HttpServletRequest request,
         @RequestParam(value="file", required=false) MultipartFile[] files) throws SQLException {
         System.out.println(request.getParameter("category"));
-        System.out.println(request.getParameter("subject"));
+        System.out.println(request.getParameter("title"));
         System.out.println(request.getParameter("content"));
 
         Map<String,Object> resultMap = new HashMap<String,Object>();

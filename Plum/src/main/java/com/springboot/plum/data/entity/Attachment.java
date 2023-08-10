@@ -23,15 +23,17 @@ public class Attachment {
     private AttachmentType attachmentType;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="boardpost_id")
+    @JoinColumn(name="boardpost_id", referencedColumnName ="boardpost_id")
     private BoardPost boardPost;
 
     @Builder
-    public Attachment(Long id, String originFilename, String storeFilename, AttachmentType attachmentType){
+    public Attachment(Long id, String originFilename, String storeFilename, AttachmentType attachmentType,
+                      BoardPost boardPost){
         this.id=id;
         this.originFilename=originFilename;
         this.storeFilename=storeFilename;
         this.attachmentType=attachmentType;
+        this.boardPost=boardPost;
     }
 
 

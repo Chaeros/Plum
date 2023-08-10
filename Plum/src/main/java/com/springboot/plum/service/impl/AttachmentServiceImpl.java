@@ -3,6 +3,7 @@ package com.springboot.plum.service.impl;
 import com.springboot.plum.data.component.FileStore;
 import com.springboot.plum.data.entity.Attachment;
 import com.springboot.plum.data.entity.AttachmentType;
+import com.springboot.plum.data.entity.BoardPost;
 import com.springboot.plum.data.repository.AttachmentRepository;
 import com.springboot.plum.service.AttachmentService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,12 @@ public class AttachmentServiceImpl implements AttachmentService {
     private final AttachmentRepository attachmentRepository;
     private final FileStore fileStore;
 
-    public List<Attachment> saveAttachments(Map<AttachmentType, List<MultipartFile>> multipartFileListMap) throws IOException {
+    public List<Attachment> saveAttachments(Map<AttachmentType,
+            List<MultipartFile>> multipartFileListMap, BoardPost boardPost) throws IOException {
         // imageFiles에는 IMAGE 파일들만 구분하여 넣는다.
-        List<Attachment> imageFiles = fileStore.storeFiles(multipartFileListMap.get(AttachmentType.IMAGE), AttachmentType.IMAGE);
+        List<Attachment> imageFiles = fileStore.storeFiles(multipartFileListMap.get(AttachmentType.IMAGE), AttachmentType.IMAGE,boardPost);
         // generalFiles에는 GENERAL 파일들만 구분하여 넣는다.
-        List<Attachment> generalFiles = fileStore.storeFiles(multipartFileListMap.get(AttachmentType.GENERAL), AttachmentType.GENERAL);
+        List<Attachment> generalFiles = fileStore.storeFiles(multipartFileListMap.get(AttachmentType.GENERAL), AttachmentType.GENERAL,boardPost);
         List<Attachment> result =
                 Stream.of(imageFiles, generalFiles)
                 .flatMap(f -> f.stream())

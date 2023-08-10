@@ -4,12 +4,14 @@ import com.springboot.plum.data.entity.BoardPost;
 import com.springboot.plum.data.entity.NoticeBoard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class BoardPostRepository {
     //@PersistenceContext  // JPA의 엔티티 매니저를 스프링이 생성한 엔티티 매니저로 주입해준다.
     private final EntityManager em;

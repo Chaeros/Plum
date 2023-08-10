@@ -29,11 +29,11 @@ public class BoardPost {
     private boolean isDeleted;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")   //외래키 이름 설정
+    @JoinColumn(name="user_id", referencedColumnName = "user_id")   //외래키 이름 설정
     private User user;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="noticeboard_id")
+    @JoinColumn(name="noticeboard_id", referencedColumnName = "noticeboard_id")
     private NoticeBoard noticeBoard;
 
     @OneToMany(mappedBy = "boardPost" , cascade = CascadeType.ALL)

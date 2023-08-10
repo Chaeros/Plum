@@ -26,11 +26,11 @@ public class BoardPostService {
     }
 
     public BoardPost post(BoardPostDto boardPostDto) throws IOException {
-        List<Attachment> attachments = attachmentService.saveAttachments(boardPostDto.getAttachmentFiles());
+        BoardPost board = boardPostDto.createBoard();
+        List<Attachment> attachments = attachmentService.saveAttachments(boardPostDto.getAttachmentFiles(),board);
 //        for (Attachment attachment : attachments) {
 //            log.info(attachment.getOriginFilename());
 //        }
-        BoardPost board = boardPostDto.createBoard();
         board.setAttachments(attachments);
 
         return boardPostRepository.save(board);
