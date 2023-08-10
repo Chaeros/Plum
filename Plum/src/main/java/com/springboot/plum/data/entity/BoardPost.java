@@ -1,5 +1,6 @@
 package com.springboot.plum.data.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,18 @@ public class BoardPost {
     @Column(name="boardpost_id")
     private Long id;
 
+    private String title;
+
+    private String content;
+
+    private LocalDateTime writeTime;
+
+    private int likeCount;
+
+    private Long writerId;
+
+    private boolean isDeleted;
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")   //외래키 이름 설정
     private User user;
@@ -26,16 +39,24 @@ public class BoardPost {
     @OneToMany(mappedBy = "boardPost" , cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "attachment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "boardPost", cascade = CascadeType.ALL)
     private List<Attachment> attachments = new ArrayList<>();
 
-    private String subject;
+    public BoardPost(){
 
-    private String content;
+    }
 
-    private LocalDateTime postDate;
-
-    private String writer;
-
-    private int likeCount;
+    @Builder
+    public BoardPost(Long id, String title, String content, LocalDateTime writeTime, User writer,
+                     int likeCount, boolean isDeleted, List<Attachment> attachments) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.writeTime = writeTime;
+        Long tempWriterId=writer.getId();
+        this.writerId = tempWriterId;
+        this.likeCount = likeCount;
+        this.attachments = attachments;
+        this.isDeleted = isDeleted;
+    }
 }

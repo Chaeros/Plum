@@ -1,9 +1,12 @@
 package com.springboot.plum.data.entity;
 
+import com.springboot.plum.data.dto.BoardPostDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,5 +24,4 @@ public class NoticeBoard {
 
     @OneToMany(mappedBy = "noticeBoard" , cascade = CascadeType.ALL)
     private List<BoardPost> boardPosts = new ArrayList<>();
-
 }

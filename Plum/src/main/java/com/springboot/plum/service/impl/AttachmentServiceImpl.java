@@ -31,7 +31,6 @@ public class AttachmentServiceImpl implements AttachmentService {
                 Stream.of(imageFiles, generalFiles)
                 .flatMap(f -> f.stream())
                 .collect(Collectors.toList());
-
         return result;
     }
 

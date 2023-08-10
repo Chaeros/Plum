@@ -17,7 +17,7 @@ import java.util.UUID;
 public class FileStore {
 
     //@Value("${file.dir}/")
-    private String fileDirPath=new String("D://images");
+    private String fileDirPath=new String("D:/SpringProject/files2/");
 
     public List<Attachment> storeFiles(List<MultipartFile> multipartFiles, AttachmentType attachmentType) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
