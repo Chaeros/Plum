@@ -19,14 +19,17 @@ public class BoardPostDto {
     private User writer;
     private String title;
     private String content;
+    private NoticeBoard noticeBoard;
     private Map<AttachmentType, List<MultipartFile>> attachmentFiles = new ConcurrentHashMap<>();
 
     @Builder
-    public BoardPostDto(User writer, String title, String content, Map<AttachmentType, List<MultipartFile>> attachmentFiles) {
+    public BoardPostDto(User writer, String title, String content, Map<AttachmentType,
+            List<MultipartFile>> attachmentFiles, NoticeBoard noticeBoard) {
         this.writer = writer;
         this.title = title;
         this.content = content;
         this.attachmentFiles = attachmentFiles;
+        this.noticeBoard =noticeBoard;
     }
 
     public BoardPost createBoard() {
@@ -38,6 +41,7 @@ public class BoardPostDto {
                 .attachments(new ArrayList<>())
                 .isDeleted(false)
                 .likeCount(0)
+                .noticeBoard(noticeBoard)
                 .build();
     }
 }

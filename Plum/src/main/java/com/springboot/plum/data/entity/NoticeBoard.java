@@ -17,6 +17,7 @@ public class NoticeBoard {
     @Column(name="noticeboard_id")
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "noticeBoard" , cascade = CascadeType.ALL)

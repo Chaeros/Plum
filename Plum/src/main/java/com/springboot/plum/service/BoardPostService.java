@@ -35,4 +35,8 @@ public class BoardPostService {
 
         return boardPostRepository.save(board);
     }
+
+    public BoardPost findOne(Long id){
+        return boardPostRepository.findOne(id);
+    }
 }

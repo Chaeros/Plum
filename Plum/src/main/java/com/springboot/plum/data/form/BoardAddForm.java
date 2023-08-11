@@ -2,6 +2,7 @@ package com.springboot.plum.data.form;
 
 import com.springboot.plum.data.dto.BoardPostDto;
 import com.springboot.plum.data.entity.AttachmentType;
+import com.springboot.plum.data.entity.NoticeBoard;
 import com.springboot.plum.data.entity.User;
 import lombok.Builder;
 import lombok.Data;
@@ -30,13 +31,14 @@ public class BoardAddForm {
     }
 
 
-    public BoardPostDto createBoardPostDto(User user) {
+    public BoardPostDto createBoardPostDto(User user, NoticeBoard noticeBoard) {
         Map<AttachmentType, List<MultipartFile>> attachments = getAttachmentTypeListMap();
         return BoardPostDto.builder()
                 .title(title)
                 .writer(user)
                 .content(content)
                 .attachmentFiles(attachments)
+                .noticeBoard(noticeBoard)
                 .build();
     }
 

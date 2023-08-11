@@ -24,8 +24,6 @@ public class BoardPost {
 
     private int likeCount;
 
-    private Long writerId;
-
     private boolean isDeleted;
 
     @ManyToOne(fetch=FetchType.LAZY)
@@ -48,15 +46,15 @@ public class BoardPost {
 
     @Builder
     public BoardPost(Long id, String title, String content, LocalDateTime writeTime, User writer,
-                     int likeCount, boolean isDeleted, List<Attachment> attachments) {
+                     int likeCount, boolean isDeleted, List<Attachment> attachments, NoticeBoard noticeBoard) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.writeTime = writeTime;
-        Long tempWriterId=writer.getId();
-        this.writerId = tempWriterId;
+        this.user=writer;
         this.likeCount = likeCount;
         this.attachments = attachments;
         this.isDeleted = isDeleted;
+        this.noticeBoard= noticeBoard;
     }
 }

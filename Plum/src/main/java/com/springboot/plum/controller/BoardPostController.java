@@ -3,12 +3,12 @@ package com.springboot.plum.controller;
 import com.springboot.plum.config.security.JwtTokenProvider;
 import com.springboot.plum.data.component.FileStore;
 import com.springboot.plum.data.dto.BoardPostDto;
-import com.springboot.plum.data.entity.AttachmentType;
-import com.springboot.plum.data.entity.BoardPost;
-import com.springboot.plum.data.entity.User;
+import com.springboot.plum.data.dto.BoardPostReadDto;
+import com.springboot.plum.data.entity.*;
 import com.springboot.plum.data.form.BoardAddForm;
 import com.springboot.plum.data.repository.AttachmentRepository;
 import com.springboot.plum.data.repository.BoardPostRepository;
+import com.springboot.plum.data.repository.NoticeBoardRepository;
 import com.springboot.plum.service.BoardPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -38,6 +38,7 @@ public class BoardPostController {
     private final BoardPostService boardPostService;
     private final FileStore fileStore;
     private final AttachmentRepository attachmentRepository;
+    private final NoticeBoardRepository noticeBoardRepository;
 
     // 게시글 작성하면 제목, 내용, 이미지들을 DB에 저장함
     @RequestMapping(value="/create", method= RequestMethod.POST)
@@ -49,18 +50,25 @@ public class BoardPostController {
                 request.getParameter("content"),
                 files,null);
 
+        NoticeBoard noticeBoard = noticeBoardRepository.findOne(request.getParameter("category"));
+
         String token = jwtTokenProvider.resolveToken(request);
         UserDetails user = userDetailsService.loadUserByUsername(jwtTokenProvider.getUsername(token));
-        BoardPostDto boardPostDto = boardAddForm.createBoardPostDto((User)user);
+        BoardPostDto boardPostDto = boardAddForm.createBoardPostDto((User)user,noticeBoard);
         BoardPost boardPost = boardPostService.post(boardPostDto);
     }
 
     // 특정 이미지 로드
-    @ResponseBody
-    @GetMapping("/imagesLoad")
-    public Resource processImg(@PathVariable String filename) throws MalformedURLException {
-        System.out.println("filename="+filename);
+    @PostMapping(value ="/postLoad")
+    public BoardPostReadDto processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
+        System.out.println(request.getParameter("post_id"));
+        System.out.println("postId="+postId);
+        BoardPost boardPost = boardPostService.findOne(postId);
+
+        BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
+        boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getAttachments());
+
         attachmentRepository.findAll();
-        return new UrlResource("file:" + fileStore.createPath(filename, AttachmentType.IMAGE));
+        return boardPostDto;
     }
 }
