@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,7 +20,8 @@ public class BoardPostReadDto {
     private String title;
     private String content;
     private NoticeBoard noticeBoard;
-    private List<Attachment> attachments;
+    private List<String> imagesURL = new ArrayList<>();
+
 
     public BoardPostReadDto(User writer, String title, String content,
            NoticeBoard noticeBoard, List<Attachment> attachments) {
@@ -27,6 +29,9 @@ public class BoardPostReadDto {
         this.title = title;
         this.content = content;
         this.noticeBoard = noticeBoard;
-        this.attachments = attachments;
+
+        for(Attachment attachment:attachments){
+            this.imagesURL.add(attachment.getStoreFilename());
+        }
     }
 }

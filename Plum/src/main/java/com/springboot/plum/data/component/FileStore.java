@@ -18,7 +18,7 @@ import java.util.UUID;
 public class FileStore {
 
     //@Value("${file.dir}/")
-    private String fileDirPath=new String("D:/SpringProject/files2/");
+    private String fileDirPath=new String("D:/SpringProject/Plum/src/main/resources/static/");
 
     public List<Attachment> storeFiles(List<MultipartFile> multipartFiles, AttachmentType attachmentType,
                                        BoardPost boardPost) throws IOException {

@@ -11,6 +11,7 @@ import com.springboot.plum.data.repository.BoardPostRepository;
 import com.springboot.plum.data.repository.NoticeBoardRepository;
 import com.springboot.plum.service.BoardPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,8 @@ public class BoardPostController {
     private final FileStore fileStore;
     private final AttachmentRepository attachmentRepository;
     private final NoticeBoardRepository noticeBoardRepository;
+
+    private String imagesFolderName="/images/";
 
     // 게시글 작성하면 제목, 내용, 이미지들을 DB에 저장함
     @RequestMapping(value="/create", method= RequestMethod.POST)
@@ -58,17 +62,40 @@ public class BoardPostController {
         BoardPost boardPost = boardPostService.post(boardPostDto);
     }
 
-    // 특정 이미지 로드
     @PostMapping(value ="/postLoad")
-    public BoardPostReadDto processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
+    public List<String> processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
         System.out.println(request.getParameter("post_id"));
         System.out.println("postId="+postId);
+        System.out.println(request.getHeader("Authorization"));
+        System.out.println(postId.getClass());
         BoardPost boardPost = boardPostService.findOne(postId);
 
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-        boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getAttachments());
+                boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getAttachments());
+
+        List<String> imagesURL = new ArrayList<>();
+        List<Attachment> attachments = boardPost.getAttachments();
+        for(Attachment attachment:attachments){
+            imagesURL.add(imagesFolderName+attachment.getStoreFilename());
+        }
 
         attachmentRepository.findAll();
-        return boardPostDto;
+        return imagesURL;
     }
+
+    // 특정 이미지 로드
+//    @PostMapping(value ="/postLoad")
+//    public BoardPostReadDto processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
+//        System.out.println(request.getParameter("post_id"));
+//        System.out.println("postId="+postId);
+//        System.out.println(request.getHeader("Authorization"));
+//        System.out.println(postId.getClass());
+//        BoardPost boardPost = boardPostService.findOne(postId);
+//
+//        BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
+//        boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getAttachments());
+//
+//        attachmentRepository.findAll();
+//        return boardPostDto;
+//    }
 }
