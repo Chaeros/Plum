@@ -1,5 +1,6 @@
 package com.springboot.plum.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.springboot.plum.data.dto.BoardPostDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,9 +21,11 @@ public class NoticeBoard {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "noticeBoard" , cascade = CascadeType.ALL)
     private List<MyBoard> myBoards = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "noticeBoard" , cascade = CascadeType.ALL)
     private List<BoardPost> boardPosts = new ArrayList<>();
 }

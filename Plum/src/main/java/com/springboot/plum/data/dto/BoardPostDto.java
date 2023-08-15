@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Data
+@Getter
 @NoArgsConstructor
 public class BoardPostDto {
     private User writer;

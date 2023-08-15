@@ -1,5 +1,7 @@
 package com.springboot.plum.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,17 +28,21 @@ public class BoardPost {
 
     private boolean isDeleted;
 
+    @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")   //외래키 이름 설정
     private User user;
 
+    @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="noticeboard_id", referencedColumnName = "noticeboard_id")
     private NoticeBoard noticeBoard;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "boardPost" , cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "boardPost", cascade = CascadeType.ALL)
     private List<Attachment> attachments = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.springboot.plum.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Comment {
     @Column(name="comment_id")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="boardpost_id")
     private BoardPost boardPost;

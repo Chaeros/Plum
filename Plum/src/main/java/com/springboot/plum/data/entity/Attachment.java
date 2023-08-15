@@ -1,5 +1,6 @@
 package com.springboot.plum.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Attachment {
     @Enumerated(EnumType.STRING)
     private AttachmentType attachmentType;
 
+    @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="boardpost_id", referencedColumnName ="boardpost_id")
     private BoardPost boardPost;

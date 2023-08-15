@@ -1,6 +1,8 @@
 package com.springboot.plum.data.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Builder
 @Table
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
 
     private static final long serialVersionUID = 6014984039564979072L;
@@ -49,9 +52,11 @@ public class User implements UserDetails {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<MyBoard> myBoards = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<BoardPost> boardPosts = new ArrayList<>();
 
