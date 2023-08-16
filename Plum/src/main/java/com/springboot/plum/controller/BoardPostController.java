@@ -11,6 +11,8 @@ import com.springboot.plum.data.repository.AttachmentRepository;
 import com.springboot.plum.data.repository.BoardPostRepository;
 import com.springboot.plum.data.repository.NoticeBoardRepository;
 import com.springboot.plum.service.BoardPostService;
+import com.springboot.plum.service.CommentService;
+import com.springboot.plum.service.impl.PostCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +51,7 @@ public class BoardPostController {
     private final AttachmentRepository attachmentRepository;
     private final NoticeBoardRepository noticeBoardRepository;
     private final ObjectMapper objectMapper;
+    private final PostCommentService postCommentService;
 
     private String imagesFolderName="/images/";
 
@@ -111,6 +115,34 @@ public class BoardPostController {
 //        attachmentRepository.findAll();
 //        return new ResponseEntity<>(boardPostDto, headers, HttpStatus.OK);
     }
+
+    @PostMapping(value ="/addComment")
+    public void postListList(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(value="post_id", required=false) Long postId) throws IOException {
+        System.out.println(postId);
+        System.out.println(request.getParameter("content"));
+
+        BoardPost boardPost = boardPostService.findOne(postId);
+
+        Comment comment = postCommentService.storeComment(boardPost.getUser().getName(),
+                request.getParameter("content"), LocalDateTime.now(),boardPost);
+        Comment returnComment = boardPostService.addComment(postId,comment);
+
+
+        String jsonResponse = objectMapper.writeValueAsString(returnComment);
+
+        // JSON 응답을 위해 헤더 설정
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        // JSON 응답 작성
+        response.getWriter().write(jsonResponse);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
 
 
 //    @PostMapping(value ="/postLoad")

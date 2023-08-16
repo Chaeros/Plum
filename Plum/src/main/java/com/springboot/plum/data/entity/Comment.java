@@ -28,4 +28,14 @@ public class Comment {
     private Integer likeCount;
 
     private LocalDateTime commentDate;
+
+    @Builder
+    public Comment(BoardPost boardPost, String writer, String content,
+                   Integer likeCount, LocalDateTime commentDate) {
+        this.boardPost = boardPost;
+        this.writer = writer;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.commentDate = commentDate;
+    }
 }
