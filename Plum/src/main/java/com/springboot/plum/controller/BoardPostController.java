@@ -5,6 +5,8 @@ import com.springboot.plum.config.security.JwtTokenProvider;
 import com.springboot.plum.data.component.FileStore;
 import com.springboot.plum.data.dto.BoardPostDto;
 import com.springboot.plum.data.dto.BoardPostReadDto;
+import com.springboot.plum.data.dto.CommentRequestDto;
+import com.springboot.plum.data.dto.TestDto;
 import com.springboot.plum.data.entity.*;
 import com.springboot.plum.data.form.BoardAddForm;
 import com.springboot.plum.data.repository.AttachmentRepository;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
@@ -90,10 +93,12 @@ public class BoardPostController {
             imagesURL.add(imagesFolderName+attachment.getStoreFilename());
         }
 
+        List<Comment> comments = boardPost.getComments();
+
         System.out.println(boardPost.getUser().getName());
 
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-                boardPost.getContent(),boardPost.getNoticeBoard(), imagesURL);
+                boardPost.getContent(),boardPost.getNoticeBoard(), imagesURL,comments);
 
         System.out.println(boardPostDto.getNoticeBoardName());
         System.out.println(boardPostDto.getContent());
@@ -116,33 +121,39 @@ public class BoardPostController {
 //        return new ResponseEntity<>(boardPostDto, headers, HttpStatus.OK);
     }
 
-    @PostMapping(value ="/addComment")
-    public void postListList(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @RequestParam(value="post_id", required=false) Long postId) throws IOException {
-        System.out.println(postId);
-        System.out.println(request.getParameter("content"));
+    @PostMapping(value ="/addComment", consumes="application/json;")
+    public ResponseEntity<CommentRequestDto> postListList(@RequestBody CommentRequestDto commentRequestDto) throws IOException {
 
+        Long postId= commentRequestDto.getPost_id();
+        String content = commentRequestDto.getContent();
+
+        // 데이터 수신 확인용
+        System.out.println("postId="+commentRequestDto.getPost_id());
+        System.out.println("content="+commentRequestDto.getContent());
+
+        // comment 객체 생성시 필요한 데이터
         BoardPost boardPost = boardPostService.findOne(postId);
+        String writer = boardPost.getUser().getName();
 
-        Comment comment = postCommentService.storeComment(boardPost.getUser().getName(),
-                request.getParameter("content"), LocalDateTime.now(),boardPost);
-        Comment returnComment = boardPostService.addComment(postId,comment);
+        // 입력한 데이터를 기반으로 comment 객체 생성
+        Comment comment = postCommentService.storeComment(writer,
+                content, LocalDateTime.now(),boardPost);
+        
+        // postId에 해당되는 게시물에 comment 추가
+        boardPostService.addComment(postId,comment);
 
-
-        String jsonResponse = objectMapper.writeValueAsString(returnComment);
-
-        // JSON 응답을 위해 헤더 설정
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        // JSON 응답 작성
-        response.getWriter().write(jsonResponse);
-        response.setStatus(HttpServletResponse.SC_OK);
+        //
+        return new ResponseEntity<>(commentRequestDto, HttpStatus.OK);
     }
 
+    // 특정 게시판의 모든 게시글들을 반환시킴
+    @PostMapping(value = "/boardList", consumes="application/json;")
+    public List<BoardPost> boardList(@RequestBody HashMap<String, Object> map){
+        // 콘솔 확인용
+        System.out.println("/boardList:category="+map.get("category"));
+        String category = (String)map.get("category");
+        return boardPostService.bringOneBoardPostList(category);
+    }
 
 
 //    @PostMapping(value ="/postLoad")

@@ -24,4 +24,10 @@ public class BoardPostRepository {
         return em.createQuery("select m from BoardPost m", BoardPost.class)
                 .getResultList();  //쿼리문, 반환할 타입    jpql 문법으로, from의 대상이 Member 테이블이 아니라 entity로 들어간다
     }
+
+    public List<BoardPost> findOneBoardPostList(NoticeBoard noticeBoard){
+        return em.createQuery("select m from BoardPost m where m.noticeBoard = :noticeBoard", BoardPost.class)
+                .setParameter("noticeBoard", noticeBoard)  // 파라미터 바인딩, where에 ':파라미터명' 으로 사용
+                .getResultList();
+    }
 }

@@ -1,9 +1,6 @@
 package com.springboot.plum.data.dto;
 
-import com.springboot.plum.data.entity.Attachment;
-import com.springboot.plum.data.entity.AttachmentType;
-import com.springboot.plum.data.entity.NoticeBoard;
-import com.springboot.plum.data.entity.User;
+import com.springboot.plum.data.entity.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +19,11 @@ public class BoardPostReadDto {
     private String content;
     private String noticeBoardName;
     private List<String> imagesURL;
+    private List<Comment> comments;
 
 
     public BoardPostReadDto(User user, String title, String content,
-           NoticeBoard noticeBoard, List<String> imagesURL) {
+           NoticeBoard noticeBoard, List<String> imagesURL, List<Comment> comments) {
         this.user = user;
         this.writer=user.getName();
         this.title = title;
@@ -33,5 +31,6 @@ public class BoardPostReadDto {
         String boardName=noticeBoard.getName();
         this.noticeBoardName = boardName;
         this.imagesURL = imagesURL;
+        this.comments = comments;
     }
 }
