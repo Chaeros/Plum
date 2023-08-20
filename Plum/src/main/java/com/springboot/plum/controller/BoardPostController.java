@@ -146,16 +146,6 @@ public class BoardPostController {
         return new ResponseEntity<>(commentRequestDto, HttpStatus.OK);
     }
 
-    // 특정 게시판의 모든 게시글들을 반환시킴
-    @PostMapping(value = "/boardList", consumes="application/json;")
-    public List<BoardPost> boardList(@RequestBody HashMap<String, Object> map){
-        // 콘솔 확인용
-        System.out.println("/boardList:category="+map.get("category"));
-        String category = (String)map.get("category");
-        return boardPostService.bringOneBoardPostList(category);
-    }
-
-
 //    @PostMapping(value ="/postLoad")
 //    public List<String> processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
 //        System.out.println(request.getParameter("post_id"));

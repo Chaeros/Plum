@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,16 @@ public class AllBoardPostController {
     private final ObjectMapper objectMapper;
 
     private String imagesFolderName="/images/";
+
+    // 특정 게시판의 모든 게시글들을 반환시킴
+    @PostMapping(value = "/boardList", consumes="application/json;")
+    public List<BoardPost> boardList(@RequestBody HashMap<String, Object> map){
+        // 콘솔 확인용
+        System.out.println("/boardList:category="+map.get("category"));
+        String category = (String)map.get("category");
+        return boardPostService.bringOneBoardPostList(category);
+    }
+
     @GetMapping(value ="/postLoad")
     public void processImg(
             HttpServletRequest request,

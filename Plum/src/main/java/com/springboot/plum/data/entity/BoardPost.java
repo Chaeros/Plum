@@ -28,6 +28,8 @@ public class BoardPost {
 
     private boolean isDeleted;
 
+    private String writer;
+
     @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")   //외래키 이름 설정
@@ -58,6 +60,7 @@ public class BoardPost {
         this.content = content;
         this.writeTime = writeTime;
         this.user=writer;
+        this.writer=user.getName();
         this.likeCount = likeCount;
         this.attachments = attachments;
         this.isDeleted = isDeleted;
