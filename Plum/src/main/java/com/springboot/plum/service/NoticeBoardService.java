@@ -1,7 +1,7 @@
 package com.springboot.plum.service;
 
 import com.springboot.plum.data.entity.NoticeBoard;
-import com.springboot.plum.data.repository.NoticeBoardRepository;
+import com.springboot.plum.repository.NoticeBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,6 @@
 package com.springboot.plum.service.impl;
 
-import com.springboot.plum.data.repository.UserRepository;
+import com.springboot.plum.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

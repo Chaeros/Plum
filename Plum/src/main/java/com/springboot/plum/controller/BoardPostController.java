@@ -6,20 +6,15 @@ import com.springboot.plum.data.component.FileStore;
 import com.springboot.plum.data.dto.BoardPostDto;
 import com.springboot.plum.data.dto.BoardPostReadDto;
 import com.springboot.plum.data.dto.CommentRequestDto;
-import com.springboot.plum.data.dto.TestDto;
 import com.springboot.plum.data.entity.*;
 import com.springboot.plum.data.form.BoardAddForm;
-import com.springboot.plum.data.repository.AttachmentRepository;
-import com.springboot.plum.data.repository.BoardPostRepository;
-import com.springboot.plum.data.repository.NoticeBoardRepository;
+import com.springboot.plum.repository.AttachmentRepository;
+import com.springboot.plum.repository.BoardPostRepository;
+import com.springboot.plum.repository.NoticeBoardRepository;
 import com.springboot.plum.service.BoardPostService;
-import com.springboot.plum.service.CommentService;
 import com.springboot.plum.service.impl.PostCommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,22 +24,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
 @RequestMapping("user/boardPost")
 @RequiredArgsConstructor
 @ResponseBody
+@Slf4j
 public class BoardPostController {
 
     private final UserDetailsService userDetailsService;
@@ -55,6 +46,7 @@ public class BoardPostController {
     private final NoticeBoardRepository noticeBoardRepository;
     private final ObjectMapper objectMapper;
     private final PostCommentService postCommentService;
+    private final BoardPostRepository boardPostRepository;
 
     private String imagesFolderName="/images/";
 
@@ -81,10 +73,7 @@ public class BoardPostController {
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestParam(value="post_id", required=false) Long postId) throws IOException {
-        System.out.println(request.getParameter("post_id"));
-        System.out.println("postId="+postId);
-        System.out.println(request.getHeader("Authorization"));
-        System.out.println(postId.getClass());
+        log.info("Authorization={}",request.getHeader("Authorization"));
         BoardPost boardPost = boardPostService.findOne(postId);
 
         List<String> imagesURL = new ArrayList<>();
@@ -95,28 +84,19 @@ public class BoardPostController {
 
         List<Comment> comments = boardPost.getComments();
 
-        System.out.println(boardPost.getUser().getName());
-
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
                 boardPost.getContent(),boardPost.getNoticeBoard(), imagesURL,comments);
-
-        System.out.println(boardPostDto.getNoticeBoardName());
-        System.out.println(boardPostDto.getContent());
-        System.out.println(boardPostDto.getTitle());
-        //System.out.println(boardPostDto.getWriter());
-
 
         String jsonResponse = objectMapper.writeValueAsString(boardPostDto);
 
         // JSON 응답을 위해 헤더 설정
-
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         // JSON 응답 작성
         response.getWriter().write(jsonResponse);
         response.setStatus(HttpServletResponse.SC_OK);
-//
+
 //        attachmentRepository.findAll();
 //        return new ResponseEntity<>(boardPostDto, headers, HttpStatus.OK);
     }

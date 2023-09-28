@@ -1,4 +1,4 @@
-package com.springboot.plum.data.repository;
+package com.springboot.plum.repository;
 
 import com.springboot.plum.data.entity.Attachment;
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import com.springboot.plum.data.component.FileStore;
 import com.springboot.plum.data.entity.Attachment;
 import com.springboot.plum.data.entity.AttachmentType;
 import com.springboot.plum.data.entity.BoardPost;
-import com.springboot.plum.data.repository.AttachmentRepository;
+import com.springboot.plum.repository.AttachmentRepository;
 import com.springboot.plum.service.AttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

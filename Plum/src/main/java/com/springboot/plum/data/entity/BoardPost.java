@@ -29,6 +29,8 @@ public class BoardPost {
     private boolean isDeleted;
 
     private String writer;
+    
+    private int views;  // 조회수
 
     @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
@@ -65,5 +67,9 @@ public class BoardPost {
         this.attachments = attachments;
         this.isDeleted = isDeleted;
         this.noticeBoard= noticeBoard;
+    }
+
+    public void increaseViews(){
+        ++this.views;
     }
 }

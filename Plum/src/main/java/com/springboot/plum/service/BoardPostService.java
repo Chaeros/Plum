@@ -5,9 +5,9 @@ import com.springboot.plum.data.entity.Attachment;
 import com.springboot.plum.data.entity.BoardPost;
 import com.springboot.plum.data.entity.Comment;
 import com.springboot.plum.data.entity.NoticeBoard;
-import com.springboot.plum.data.repository.BoardPostRepository;
-import com.springboot.plum.data.repository.CommentRepository;
-import com.springboot.plum.data.repository.NoticeBoardRepository;
+import com.springboot.plum.repository.BoardPostRepository;
+import com.springboot.plum.repository.CommentRepository;
+import com.springboot.plum.repository.NoticeBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,4 +58,28 @@ public class BoardPostService {
         NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
         return boardPostRepository.findOneBoardPostList(noticeBoard);
     }
+
+    // 특정 게시판의 게시글 10개를 페이지 번호에 맞게 호출
+    public List<BoardPost> bringOneBoardPostListPage(String category,int pageNum){
+        NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
+        return boardPostRepository.findOneBoardPostListPage(noticeBoard,pageNum);
+    }
+
+    // 특정 게시판의 게시글 10개를 페이지 번호에 맞게 반환
+    public long bringBoardCount(String category){
+        NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
+        return boardPostRepository.boardCount(noticeBoard);
+    }
+
+    // 특정 게시판의 검색어에 알맞는 게시글 개수 반환
+    public long bringBoardCountByKeyword(String category,String keyword, String type){
+        NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
+        return boardPostRepository.boardCountByKeyword(noticeBoard,keyword,type);
+    }
+
+    public List<BoardPost> bringBoardsByKeword(String category,String keyword,String type,int pageNum){
+        NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
+        return boardPostRepository.findBoardsByKeword(noticeBoard,keyword,type,pageNum);
+    }
+
 }

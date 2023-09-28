@@ -5,7 +5,7 @@ import com.springboot.plum.config.security.JwtTokenProvider;
 import com.springboot.plum.data.dto.SignInResultDto;
 import com.springboot.plum.data.dto.SignUpResultDto;
 import com.springboot.plum.data.entity.User;
-import com.springboot.plum.data.repository.UserRepository;
+import com.springboot.plum.repository.UserRepository;
 import com.springboot.plum.service.SignService;
 import java.util.Collections;
 import org.slf4j.Logger;
