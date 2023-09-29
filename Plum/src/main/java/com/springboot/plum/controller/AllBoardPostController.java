@@ -22,7 +22,6 @@ import java.util.List;
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
 @RequestMapping("/boardPost")
 @RequiredArgsConstructor
-@ResponseBody
 @Slf4j
 public class AllBoardPostController {
 
@@ -58,6 +57,12 @@ public class AllBoardPostController {
                                            @RequestParam String type){
         if(keyword==null) keyword="";
         log.info("category={}, type={}, keyword={}, pageNum={}",category,type,keyword,pageNum);
+
+        List<BoardPost> list = boardPostService.bringBoardsByKeword(category,keyword,type,pageNum);
+        System.out.println("list size="+list.size());
+        for(BoardPost x:list){
+            System.out.println(x.toString());
+        }
         return boardPostService.bringBoardsByKeword(category,keyword,type,pageNum);
     }
 
@@ -94,9 +99,8 @@ public class AllBoardPostController {
 
         List<Comment> comments = boardPost.getComments();
 
-
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-                boardPost.getContent(),boardPost.getNoticeBoard(), imagesURL,comments);
+                boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getWriteTime(),imagesURL,comments);
 
         String jsonResponse = objectMapper.writeValueAsString(boardPostDto);
 

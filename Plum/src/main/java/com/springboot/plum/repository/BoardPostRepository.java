@@ -23,6 +23,14 @@ public class BoardPostRepository {
 
     public BoardPost findOne(Long id){ return em.find(BoardPost.class,id); }
 
+    public void delete(Long id){ em.remove(findOne(id)); }
+
+    public void update(Long id,String category, String title, String content){
+        BoardPost boardPost = em.find(BoardPost.class,id);
+        boardPost.setTitle(title);
+        boardPost.setContent(content);
+    }
+
     public List<BoardPost> findAll(){
         return em.createQuery("select m from BoardPost m", BoardPost.class)
                 .getResultList();  //쿼리문, 반환할 타입    jpql 문법으로, from의 대상이 Member 테이블이 아니라 entity로 들어간다
@@ -77,7 +85,7 @@ public class BoardPostRepository {
                     .setParameter("noticeBoard", noticeBoard)  // 파라미터 바인딩, where에 ':파라미터명' 으로 사용
                     .setParameter("keyword","%"+keyword+"%")
                     .setFirstResult(10*(pageNum-1))
-                    .setMaxResults(10*pageNum-1)
+                    .setMaxResults(10*pageNum)
                     .getResultList();
         }
         else if(type.equals("작성자")){

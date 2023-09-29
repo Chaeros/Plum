@@ -6,6 +6,7 @@ import com.springboot.plum.data.component.FileStore;
 import com.springboot.plum.data.dto.BoardPostDto;
 import com.springboot.plum.data.dto.BoardPostReadDto;
 import com.springboot.plum.data.dto.CommentRequestDto;
+import com.springboot.plum.data.dto.UpdateBoardPostDTO;
 import com.springboot.plum.data.entity.*;
 import com.springboot.plum.data.form.BoardAddForm;
 import com.springboot.plum.repository.AttachmentRepository;
@@ -32,9 +33,8 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
-@RequestMapping("user/boardPost")
+@RequestMapping("/user/boardPost")
 @RequiredArgsConstructor
-@ResponseBody
 @Slf4j
 public class BoardPostController {
 
@@ -51,7 +51,7 @@ public class BoardPostController {
     private String imagesFolderName="/images/";
 
     // 게시글 작성하면 제목, 내용, 이미지들을 DB에 저장함
-    @RequestMapping(value="/create", method= RequestMethod.POST)
+    @PostMapping(value="/create")
     public void AxiosFileTest (
         HttpServletRequest request,
         @RequestParam(value="file", required=false) List<MultipartFile> files) throws SQLException,IOException {
@@ -68,13 +68,10 @@ public class BoardPostController {
         BoardPost boardPost = boardPostService.post(boardPostDto);
     }
 
-    @PostMapping(value ="/postLoad")
-    public void processImg(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @RequestParam(value="post_id", required=false) Long postId) throws IOException {
-        log.info("Authorization={}",request.getHeader("Authorization"));
-        BoardPost boardPost = boardPostService.findOne(postId);
+    // 게시글 불러오기
+    @GetMapping("/{post_id}")
+    public BoardPostReadDto processImg(@PathVariable Long post_id) throws IOException {
+        BoardPost boardPost = boardPostService.findOne(post_id);
 
         List<String> imagesURL = new ArrayList<>();
         List<Attachment> attachments = boardPost.getAttachments();
@@ -85,20 +82,30 @@ public class BoardPostController {
         List<Comment> comments = boardPost.getComments();
 
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-                boardPost.getContent(),boardPost.getNoticeBoard(), imagesURL,comments);
+                boardPost.getContent(),boardPost.getNoticeBoard(),boardPost.getWriteTime(), imagesURL,comments);
 
-        String jsonResponse = objectMapper.writeValueAsString(boardPostDto);
+        return boardPostDto;
+    }
 
-        // JSON 응답을 위해 헤더 설정
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+    // 게시글 삭제
+    @DeleteMapping("/{post_id}")
+    public void deletePost(@PathVariable long post_id){
+        log.info("[post delete] post_id={}",post_id);
+        boardPostRepository.delete(post_id);
+    }
 
-        // JSON 응답 작성
-        response.getWriter().write(jsonResponse);
-        response.setStatus(HttpServletResponse.SC_OK);
+    // 게시글 수정
+    @PutMapping("/{post_id}")
+    public void updadtePost(@RequestBody UpdateBoardPostDTO updateBoardPostDTO,
+                            @PathVariable long post_id){
+        log.info("[post update] post_id={}",post_id);
 
-//        attachmentRepository.findAll();
-//        return new ResponseEntity<>(boardPostDto, headers, HttpStatus.OK);
+        BoardPost boardPost = boardPostService.findOne(post_id);
+        String category = updateBoardPostDTO.getCategory();
+        String title = updateBoardPostDTO.getTitle();
+        String content = updateBoardPostDTO.getContent();
+
+        boardPostRepository.update(post_id,category,title,content);
     }
 
     @PostMapping(value ="/addComment", consumes="application/json;")
@@ -125,6 +132,23 @@ public class BoardPostController {
         //
         return new ResponseEntity<>(commentRequestDto, HttpStatus.OK);
     }
+
+    // 특정 게시글을 접근한 이용자가, 작성자와 동일한지 여부를 알려주는 api
+    @PostMapping(value ="/isWriter")
+    public boolean isWriter(HttpServletRequest request, @RequestParam long post_id){
+        log.info("작성자 검증");
+        String token = jwtTokenProvider.resolveToken(request);
+        User user = (User)userDetailsService.loadUserByUsername(jwtTokenProvider.getUsername(token));
+        String username = user.getName();
+
+        log.info("token={}, username={}",token,username);
+
+        BoardPost post = boardPostRepository.findOne(post_id);
+
+        if(post.getWriter().equals(username)) return true;
+        else return false;
+    }
+
 
 //    @PostMapping(value ="/postLoad")
 //    public List<String> processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){

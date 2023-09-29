@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +19,20 @@ public class BoardPostReadDto {
     private String title;
     private String content;
     private String noticeBoardName;
+    private LocalDateTime writeTime;
     private List<String> imagesURL;
     private List<Comment> comments;
 
 
     public BoardPostReadDto(User user, String title, String content,
-           NoticeBoard noticeBoard, List<String> imagesURL, List<Comment> comments) {
+           NoticeBoard noticeBoard,LocalDateTime writeTime, List<String> imagesURL, List<Comment> comments) {
         this.user = user;
         this.writer=user.getName();
         this.title = title;
         this.content = content;
         String boardName=noticeBoard.getName();
         this.noticeBoardName = boardName;
+        this.writeTime = writeTime;
         this.imagesURL = imagesURL;
         this.comments = comments;
     }
