@@ -6,7 +6,10 @@ import com.springboot.plum.data.dto.SignInResultDto;
 import com.springboot.plum.data.dto.TestDto;
 import com.springboot.plum.data.entity.NoticeBoard;
 import com.springboot.plum.service.NoticeBoardService;
+import com.springboot.plum.service.SignService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,11 +28,20 @@ import java.util.Map;
 //새로운 필드를 추가할 때 다시 생성자를 만들어서 관리해야하는 번거로움을 없애준다. (@Autowired를 사용하지 않고 의존성 주입)
 @RestController
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
+@Slf4j
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final NoticeBoardService noticeBoardService;
+    private final SignService signService;
+
+    @PostMapping(value = "/logout")
+    public ResponseEntity<Void> logout() {
+        log.info("[logout] controller");
+        signService.logout();
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping(value = "/announce", consumes="application/json;")
     public List<NoticeBoardDto> signIn(@RequestBody HashMap<String, Object> map){
@@ -37,9 +49,9 @@ public class UserController {
         List<NoticeBoard> noticeBoards = noticeBoardService.findMembers();
         List<NoticeBoardDto> boardDtos = new ArrayList<>();
         NoticeBoardDto boardDto1 = new NoticeBoardDto("자유게시판1");
-        NoticeBoardDto boardDto2 = new NoticeBoardDto("자유게시판2");
+//        NoticeBoardDto boardDto2 = new NoticeBoardDto("자유게시판2");
         boardDtos.add(boardDto1);
-        boardDtos.add(boardDto2);
+//        boardDtos.add(boardDto2);
         return boardDtos;
     }
 
@@ -54,16 +66,6 @@ public class UserController {
         return "hi";
     }
 
-//    @PostMapping(value = "/registPost", consumes="application/json;")
-//    public String fileUpload(@ModelAttribute form){
-//        System.out.println(form);
-//        String category=(String)map.get("category");
-//        String subject=(String)map.get("subject");
-//        String content=(String)map.get("content");
-//        String image=(String)map.get("image");
-//
-//        return "hi";
-//    }
 
     @RequestMapping(value="/AxiosFileTest", method=RequestMethod.POST)
     public Map<String,Object> AxiosFileTest (HttpServletRequest request,
@@ -101,19 +103,5 @@ public class UserController {
         System.out.println("FileNames =>"+ FileNames);
         resultMap.put("JavaData", paramMap);
         return resultMap;
-    }
-
-    @PostMapping(value = "/hello4")
-    public String hello4(){
-        System.out.println("hi");
-        TestDto testDto =new TestDto("park","1234");
-        return "hi";
-    }
-
-    @GetMapping(value = "/hello3")
-    public String hello3(){
-        System.out.println("hi");
-        TestDto testDto =new TestDto("park","1234");
-        return "hi";
     }
 }

@@ -10,4 +10,5 @@ public interface SignService {
 
     SignInResultDto signIn(String id, String password) throws RuntimeException;
 
+    void logout();
 }

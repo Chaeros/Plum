@@ -5,6 +5,8 @@ import com.springboot.plum.data.dto.SignUpResultDto;
 import com.springboot.plum.service.SignService;
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 // 예제 13.28
 @RestController
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
+@Slf4j
 @RequestMapping("/sign-api")
 public class SignController {
 
@@ -53,6 +56,13 @@ public class SignController {
 
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", id);
         return signUpResultDto;
+    }
+
+    @PostMapping(value = "/logout")
+    public ResponseEntity<Void> logout() {
+        log.info("[logout] controller");
+        signService.logout();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/exception")

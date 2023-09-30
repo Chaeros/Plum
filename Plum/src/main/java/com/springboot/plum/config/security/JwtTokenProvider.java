@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,8 +44,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final UserDetailsService userDetailsService; // Spring Security 에서 제공하는 서비스 레이어
+    private final RedisTemplate<String, String> redisTemplate; // redis 접근
 
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
@@ -77,6 +79,9 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + tokenValidMillisecond)) // 토큰의 만료시간
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
+
+        // redis에 유저, 토큰, 토큰 유지시간 저장
+        redisTemplate.opsForValue().set("JWT_TOKEN:" + userUid, token, tokenValidMillisecond);
 
         LOGGER.info("[createToken] 토큰 생성 완료");
         return token;

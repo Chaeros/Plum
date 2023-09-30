@@ -83,40 +83,4 @@ public class AllBoardPostController {
         return boardPostService.bringBoardCountByKeyword(category,keyword,type);
     }
 
-    @GetMapping(value ="/postLoad")
-    public void processImg(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @RequestParam(value="post_id", required=false) Long postId) throws IOException {
-        log.info("Authorization={},",request.getHeader("Authorization"));
-        BoardPost boardPost = boardPostService.findOne(postId);
-
-        List<String> imagesURL = new ArrayList<>();
-        List<Attachment> attachments = boardPost.getAttachments();
-        for(Attachment attachment:attachments){
-            imagesURL.add(imagesFolderName+attachment.getStoreFilename());
-        }
-
-        List<Comment> comments = boardPost.getComments();
-
-        BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-                boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getWriteTime(),imagesURL,comments);
-
-        String jsonResponse = objectMapper.writeValueAsString(boardPostDto);
-
-        // JSON 응답을 위해 헤더 설정
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        // JSON 응답 작성
-        response.getWriter().write(jsonResponse);
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        // 조회수 증가
-        boardPostRepository.increaseViews(postId);
-//
-//        attachmentRepository.findAll();
-//        return new ResponseEntity<>(boardPostDto, headers, HttpStatus.OK);
-    }
 }

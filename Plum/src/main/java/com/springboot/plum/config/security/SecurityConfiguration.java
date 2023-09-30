@@ -1,7 +1,9 @@
 package com.springboot.plum.config.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -17,15 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @version 1.0.0
  */
 @Configuration
+@RequiredArgsConstructor
 //@EnableWebSecurity // Spring Security에 대한 디버깅 모드를 사용하기 위한 어노테이션 (default : false)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final RedisTemplate<String, String> redisTemplate; // redis 접근
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -49,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
 
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider,redisTemplate),
                         UsernamePasswordAuthenticationFilter.class); // JWT Token 필터를 id/password 인증 필터 이전에 추가
     }
 

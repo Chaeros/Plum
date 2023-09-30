@@ -8,30 +8,30 @@ import com.springboot.plum.data.entity.User;
 import com.springboot.plum.repository.UserRepository;
 import com.springboot.plum.service.SignService;
 import java.util.Collections;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 // 예제 13.25
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class SignServiceImpl implements SignService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SignServiceImpl.class);
-
-    public UserRepository userRepository;
-    public JwtTokenProvider jwtTokenProvider;
-    public PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public SignServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public SignUpResultDto signUp(String id, String password, String name, String role) {
@@ -89,6 +89,17 @@ public class SignServiceImpl implements SignService {
         setSuccessResult(signInResultDto);
 
         return signInResultDto;
+    }
+
+    // 로그아웃
+    @Transactional
+    public void logout() {
+        //Token에서 로그인한 사용자 정보 get해 로그아웃 처리
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("[logout] Uid = {}",user.getUid());
+        if (redisTemplate.opsForValue().get("JWT_TOKEN:" + user.getUid()) != null) {
+            redisTemplate.delete("JWT_TOKEN:" + user.getUid()); //Token 삭제
+        }
     }
 
     // 결과 모델에 api 요청 성공 데이터를 세팅해주는 메소드

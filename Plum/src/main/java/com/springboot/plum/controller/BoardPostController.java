@@ -50,11 +50,12 @@ public class BoardPostController {
 
     private String imagesFolderName="/images/";
 
-    // 게시글 작성하면 제목, 내용, 이미지들을 DB에 저장함
+    // 게시글 생성(저장)
     @PostMapping(value="/create")
     public void AxiosFileTest (
         HttpServletRequest request,
         @RequestParam(value="file", required=false) List<MultipartFile> files) throws SQLException,IOException {
+        log.info("[post create]");
 
         BoardAddForm boardAddForm = new BoardAddForm(request.getParameter("title"),
                 request.getParameter("content"),
@@ -68,9 +69,10 @@ public class BoardPostController {
         BoardPost boardPost = boardPostService.post(boardPostDto);
     }
 
-    // 게시글 불러오기
+    // 게시글 읽기(불러오기)
     @GetMapping("/{post_id}")
     public BoardPostReadDto processImg(@PathVariable Long post_id) throws IOException {
+        log.info("[post read] post_id={}",post_id);
         BoardPost boardPost = boardPostService.findOne(post_id);
 
         List<String> imagesURL = new ArrayList<>();
@@ -87,13 +89,6 @@ public class BoardPostController {
         return boardPostDto;
     }
 
-    // 게시글 삭제
-    @DeleteMapping("/{post_id}")
-    public void deletePost(@PathVariable long post_id){
-        log.info("[post delete] post_id={}",post_id);
-        boardPostRepository.delete(post_id);
-    }
-
     // 게시글 수정
     @PutMapping("/{post_id}")
     public void updadtePost(@RequestBody UpdateBoardPostDTO updateBoardPostDTO,
@@ -106,6 +101,19 @@ public class BoardPostController {
         String content = updateBoardPostDTO.getContent();
 
         boardPostRepository.update(post_id,category,title,content);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/{post_id}")
+    public void deletePost(@PathVariable long post_id){
+        log.info("[post delete] post_id={}",post_id);
+        boardPostRepository.delete(post_id);
+    }
+
+    // 게시글 조회수 1 증가
+    @PostMapping("/postViewsUp/{post_id}")
+    public void postViewsUp(@PathVariable long post_id){
+        boardPostRepository.increaseViews(post_id);
     }
 
     @PostMapping(value ="/addComment", consumes="application/json;")
@@ -129,7 +137,6 @@ public class BoardPostController {
         // postId에 해당되는 게시물에 comment 추가
         boardPostService.addComment(postId,comment);
 
-        //
         return new ResponseEntity<>(commentRequestDto, HttpStatus.OK);
     }
 
@@ -148,42 +155,4 @@ public class BoardPostController {
         if(post.getWriter().equals(username)) return true;
         else return false;
     }
-
-
-//    @PostMapping(value ="/postLoad")
-//    public List<String> processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
-//        System.out.println(request.getParameter("post_id"));
-//        System.out.println("postId="+postId);
-//        System.out.println(request.getHeader("Authorization"));
-//        System.out.println(postId.getClass());
-//        BoardPost boardPost = boardPostService.findOne(postId);
-//
-//        BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-//                boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getAttachments());
-//
-//        List<String> imagesURL = new ArrayList<>();
-//        List<Attachment> attachments = boardPost.getAttachments();
-//        for(Attachment attachment:attachments){
-//            imagesURL.add(imagesFolderName+attachment.getStoreFilename());
-//        }
-//
-//        attachmentRepository.findAll();
-//        return imagesURL;
-//    }
-
-    // 특정 이미지 로드
-//    @PostMapping(value ="/postLoad")
-//    public BoardPostReadDto processImg(HttpServletRequest request,@RequestParam(value="post_id", required=false) Long postId){
-//        System.out.println(request.getParameter("post_id"));
-//        System.out.println("postId="+postId);
-//        System.out.println(request.getHeader("Authorization"));
-//        System.out.println(postId.getClass());
-//        BoardPost boardPost = boardPostService.findOne(postId);
-//
-//        BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-//        boardPost.getContent(),boardPost.getNoticeBoard(), boardPost.getAttachments());
-//
-//        attachmentRepository.findAll();
-//        return boardPostDto;
-//    }
 }

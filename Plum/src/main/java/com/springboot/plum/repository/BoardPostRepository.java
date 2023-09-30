@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import java.util.List;
 
 @Repository
@@ -98,7 +97,6 @@ public class BoardPostRepository {
                     .setMaxResults(10*pageNum-1)
                     .getResultList();
         }
-
         return null;
     }
 

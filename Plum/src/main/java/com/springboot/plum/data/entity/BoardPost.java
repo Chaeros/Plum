@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 public class BoardPost {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="boardpost_id")
     private Long id;
 
@@ -69,7 +69,4 @@ public class BoardPost {
         this.noticeBoard= noticeBoard;
     }
 
-    public void increaseViews(){
-        ++this.views;
-    }
 }
