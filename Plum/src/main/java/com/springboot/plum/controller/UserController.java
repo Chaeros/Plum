@@ -36,13 +36,6 @@ public class UserController {
     private final NoticeBoardService noticeBoardService;
     private final SignService signService;
 
-    @PostMapping(value = "/logout")
-    public ResponseEntity<Void> logout() {
-        log.info("[logout] controller");
-        signService.logout();
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping(value = "/announce", consumes="application/json;")
     public List<NoticeBoardDto> signIn(@RequestBody HashMap<String, Object> map){
         System.out.println(map);
@@ -55,53 +48,4 @@ public class UserController {
         return boardDtos;
     }
 
-    @PostMapping(value = "/registPost", consumes="application/json;")
-    public String registPost(@RequestBody HashMap<String, Object> map){
-        System.out.println(map);
-        String category=(String)map.get("category");
-        String subject=(String)map.get("subject");
-        String content=(String)map.get("content");
-        String image=(String)map.get("image");
-
-        return "hi";
-    }
-
-
-    @RequestMapping(value="/AxiosFileTest", method=RequestMethod.POST)
-    public Map<String,Object> AxiosFileTest (HttpServletRequest request,
-        @RequestParam(value="file", required=false) MultipartFile[] files) throws SQLException {
-        System.out.println(request.getParameter("category"));
-        System.out.println(request.getParameter("title"));
-        System.out.println(request.getParameter("content"));
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-        String FileNames ="";
-        System.out.println("paramMap =>"+files[0]);
-
-        String filepath = "D:/saveFolder/";
-        for (MultipartFile mf : files) {
-
-            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-            long fileSize = mf.getSize(); // 파일 사이즈
-            System.out.println("originFileName : " + originFileName);
-            System.out.println("fileSize : " + fileSize);
-
-            String safeFile =System.currentTimeMillis() + originFileName;
-
-            FileNames = FileNames+","+safeFile;
-            try {
-                File f1 = new File(filepath+safeFile);
-                mf.transferTo(f1);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        FileNames = FileNames.substring(1);
-        System.out.println("FileNames =>"+ FileNames);
-        resultMap.put("JavaData", paramMap);
-        return resultMap;
-    }
 }

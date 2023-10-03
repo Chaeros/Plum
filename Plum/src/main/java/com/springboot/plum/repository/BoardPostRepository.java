@@ -15,15 +15,12 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class BoardPostRepository {
-    //@PersistenceContext  // JPA의 엔티티 매니저를 스프링이 생성한 엔티티 매니저로 주입해준다.
+
     private final EntityManager em;
 
-    public BoardPost save(BoardPost boardPost){ em.persist(boardPost); return boardPost; }  //영속성 컨테이너에 이 객체를 올린다.
-
+    public BoardPost save(BoardPost boardPost){ em.persist(boardPost); return boardPost; }
     public BoardPost findOne(Long id){ return em.find(BoardPost.class,id); }
-
     public void delete(Long id){ em.remove(findOne(id)); }
-
     public void update(Long id,String category, String title, String content){
         BoardPost boardPost = em.find(BoardPost.class,id);
         boardPost.setTitle(title);
@@ -50,32 +47,14 @@ public class BoardPostRepository {
                 .getResultList();
     }
 
-    // 해당 카테고리 게시판의 총 게시글 개수 반환
+    // 해당 카테고리 게시판의 총 게시글 '개수' 반환
     public long boardCount(NoticeBoard noticeBoard){
         return em.createQuery("select count(m) from BoardPost m where m.noticeBoard = :noticeBoard",Long.class)
                 .setParameter("noticeBoard", noticeBoard)
                 .getSingleResult();
     }
 
-    // 해당 카테고리 게시판 검색어에 알맞는 게시글 개수 반환
-    public long boardCountByKeyword(NoticeBoard noticeBoard, String keyword, String type){
-        if(type.equals("제목")) {
-            return em.createQuery("select count(m) from BoardPost m where m.noticeBoard = :noticeBoard " +
-                            "and m.title like :keyword", Long.class)
-                    .setParameter("noticeBoard", noticeBoard)
-                    .setParameter("keyword","%"+keyword+"%")
-                    .getSingleResult();
-        }
-        else if(type.equals("작성자")) {
-            return em.createQuery("select count(m) from BoardPost m where m.noticeBoard = :noticeBoard " +
-                            "and m.writer like :keyword", Long.class)
-                    .setParameter("noticeBoard", noticeBoard)
-                    .setParameter("keyword","%"+keyword+"%")
-                    .getSingleResult();
-        }
-        return 0;
-    }
-
+    // 해당 카테고리 게시판 검색어에 알맞는 게시글 반환
     public List<BoardPost> findBoardsByKeword(NoticeBoard noticeBoard, String keyword, String type, int pageNum) {
         if(type.equals("제목")){
             log.info("findBoardsByKeword 제목");
@@ -100,7 +79,26 @@ public class BoardPostRepository {
         return null;
     }
 
-    // 게시글 조회수 증가
+    // 해당 카테고리 게시판 검색어에 알맞는 게시글 '개수' 반환
+    public long boardCountByKeyword(NoticeBoard noticeBoard, String keyword, String type){
+        if(type.equals("제목")) {
+            return em.createQuery("select count(m) from BoardPost m where m.noticeBoard = :noticeBoard " +
+                            "and m.title like :keyword", Long.class)
+                    .setParameter("noticeBoard", noticeBoard)
+                    .setParameter("keyword","%"+keyword+"%")
+                    .getSingleResult();
+        }
+        else if(type.equals("작성자")) {
+            return em.createQuery("select count(m) from BoardPost m where m.noticeBoard = :noticeBoard " +
+                            "and m.writer like :keyword", Long.class)
+                    .setParameter("noticeBoard", noticeBoard)
+                    .setParameter("keyword","%"+keyword+"%")
+                    .getSingleResult();
+        }
+        return 0;
+    }
+
+    // 게시글 조회수 1 증가
     @Transactional
     public void increaseViews(Long id){
         log.info("{}번 게시글 조회수 증가",id);
