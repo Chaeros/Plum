@@ -21,7 +21,10 @@ public class Comment {
     @JoinColumn(name="boardpost_id")
     private BoardPost boardPost;
 
-    private String writer;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
 
     private String content;
 
@@ -30,12 +33,13 @@ public class Comment {
     private LocalDateTime commentDate;
 
     @Builder
-    public Comment(BoardPost boardPost, String writer, String content,
+    public Comment(BoardPost boardPost, User user, String content,
                    Integer likeCount, LocalDateTime commentDate) {
         this.boardPost = boardPost;
-        this.writer = writer;
+        this.user = user;
         this.content = content;
         this.likeCount = likeCount;
         this.commentDate = commentDate;
     }
+
 }

@@ -60,6 +60,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<BoardPost> boardPosts = new ArrayList<>();
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
