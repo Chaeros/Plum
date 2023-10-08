@@ -4,6 +4,7 @@
 환자들이 자유롭게 자신들의 이야기를 나눌 수 있는 커뮤니티입니다.
 
 <h1>DB 설계</h1>
+
 ![image](https://github.com/Chaeros/Plum/assets/91451735/c005c844-c453-4b9b-9c12-9a0e96a5f635)
 
 ![image](https://github.com/Chaeros/Plum/assets/91451735/bf050d8b-4fce-4923-9040-bae9e82ff1a7)
@@ -18,7 +19,7 @@
 
 ![image](https://github.com/Chaeros/Plum/assets/91451735/b757cb90-1f56-4bf9-b4ef-3d82e2fb3088)
 
-
+<br><br><br>
 
 
 <h1>API 설계</h1>
