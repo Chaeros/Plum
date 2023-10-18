@@ -1,5 +1,6 @@
 package com.springboot.plum.controller;
 
+import com.springboot.plum.data.dto.BoardPostDto;
 import com.springboot.plum.data.dto.BoardPostReadDto;
 import com.springboot.plum.data.dto.UpdateBoardPostDTO;
 import com.springboot.plum.data.entity.*;
@@ -55,17 +56,17 @@ public class BoardPostController {
 
     // 특정 게시판의 모든 게시글 읽기(불러오기)
     @GetMapping()
-    public List<BoardPost> readBoardList(@RequestBody String category){
+    public List<BoardPostReadDto> readBoardList(@RequestBody String category){
         log.info("[readBoardList] category={}",category);
         return boardPostService.bringOneBoardPostList(category);
     }
 
     // 특정 게시판의 검색어가 포함된 게시글 10개를 페이지 번호에 맞게 반환
     @GetMapping(value = {"/boardList/{category}/{pageNum}/{keyword}","/boardList/{category}/{pageNum}"})
-    public List<BoardPost> searchBoardList(@PathVariable String category,
-                                           @PathVariable(required = false) String keyword,
-                                           @PathVariable int pageNum,
-                                           @RequestParam String type){
+    public List<BoardPostReadDto> searchBoardList(@PathVariable String category,
+                                              @PathVariable(required = false) String keyword,
+                                              @PathVariable int pageNum,
+                                              @RequestParam String type){
         log.info("category={}, type={}, keyword={}, pageNum={}",category,type,keyword,pageNum);
         return boardPostService.searchBoardList(category,keyword,pageNum,type);
     }

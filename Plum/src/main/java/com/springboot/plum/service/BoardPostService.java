@@ -71,7 +71,8 @@ public class BoardPostService {
         }
 
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-                boardPost.getContent(),boardPost.getNoticeBoard(),boardPost.getWriteTime(), imagesURL,commentsDto);
+                boardPost.getContent(),boardPost.getNoticeBoard(),boardPost.getWriteTime(),
+                boardPost.getWriteTime(), imagesURL,commentsDto);
 
         return boardPostDto;
     }
@@ -85,16 +86,17 @@ public class BoardPostService {
     }
 
     // 특정 게시판의 검색어가 포함된 게시글 10개를 페이지 번호에 맞게 반환
-    public List<BoardPost> searchBoardList(String category,String keyword,int pageNum,String type) {
+    public List<BoardPostReadDto> searchBoardList(String category,String keyword,int pageNum,String type) {
         if(keyword==null) keyword="";
         log.info("category={}, type={}, keyword={}, pageNum={}",category,type,keyword,pageNum);
 
-        List<BoardPost> list = bringBoardsByKeword(category,keyword,type,pageNum);
-        System.out.println("list size="+list.size());
-        for(BoardPost x:list){
-            System.out.println(x.toString());
+        List<BoardPost> boardPosts = bringBoardsByKeword(category,keyword,type,pageNum);
+        List<BoardPostReadDto> boardPostDtos = new ArrayList<>();
+        for(BoardPost boardPost:boardPosts){
+            BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost);
+            boardPostDtos.add(boardPostDto);
         }
-        return bringBoardsByKeword(category,keyword,type,pageNum);
+        return boardPostDtos;
     }
 
     public BoardPost post(BoardPostDto boardPostDto) throws IOException {
@@ -124,15 +126,27 @@ public class BoardPostService {
     }
 
     // 특정 게시판의 모든 게시물들을 호출
-    public List<BoardPost> bringOneBoardPostList(String category){
+    public List<BoardPostReadDto> bringOneBoardPostList(String category){
         NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
-        return boardPostRepository.findOneBoardPostList(noticeBoard);
+        List<BoardPost> boardPosts = boardPostRepository.findOneBoardPostList(noticeBoard);
+        List<BoardPostReadDto> boardPostDtos = new ArrayList<>();
+        for(BoardPost boardPost:boardPosts){
+            BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost);
+            boardPostDtos.add(boardPostDto);
+        }
+        return boardPostDtos;
     }
 
     // 특정 게시판의 게시글 10개를 페이지 번호에 맞게 호출
-    public List<BoardPost> bringOneBoardPostListPage(String category,int pageNum){
+    public List<BoardPostReadDto> bringOneBoardPostListPage(String category,int pageNum){
         NoticeBoard noticeBoard =noticeBoardRepository.findOne(category);
-        return boardPostRepository.findOneBoardPostListPage(noticeBoard,pageNum);
+        List<BoardPost> boardPosts = boardPostRepository.findOneBoardPostListPage(noticeBoard,pageNum);
+        List<BoardPostReadDto> boardPostDtos = new ArrayList<>();
+        for(BoardPost boardPost:boardPosts){
+            BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost);
+            boardPostDtos.add(boardPostDto);
+        }
+        return boardPostDtos;
     }
 
     // 특정 게시판의 게시글 10개를 페이지 번호에 맞게 반환
