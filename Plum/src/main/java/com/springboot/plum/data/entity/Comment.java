@@ -41,5 +41,4 @@ public class Comment {
         this.likeCount = likeCount;
         this.commentDate = commentDate;
     }
-
 }

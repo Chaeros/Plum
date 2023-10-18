@@ -21,11 +21,11 @@ public class BoardPostReadDto {
     private String noticeBoardName;
     private LocalDateTime writeTime;
     private List<String> imagesURL;
-    private List<Comment> comments;
+    private List<ReadCommentDto> comments;
 
 
     public BoardPostReadDto(User user, String title, String content,
-           NoticeBoard noticeBoard,LocalDateTime writeTime, List<String> imagesURL, List<Comment> comments) {
+           NoticeBoard noticeBoard,LocalDateTime writeTime, List<String> imagesURL, List<ReadCommentDto> comments) {
         this.user = user;
         this.writer=user.getName();
         this.title = title;

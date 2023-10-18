@@ -3,6 +3,7 @@ package com.springboot.plum.service;
 import com.springboot.plum.config.security.JwtTokenProvider;
 import com.springboot.plum.data.dto.BoardPostDto;
 import com.springboot.plum.data.dto.BoardPostReadDto;
+import com.springboot.plum.data.dto.ReadCommentDto;
 import com.springboot.plum.data.dto.UpdateBoardPostDTO;
 import com.springboot.plum.data.entity.*;
 import com.springboot.plum.data.form.BoardAddForm;
@@ -56,9 +57,21 @@ public class BoardPostService {
         }
 
         List<Comment> comments = boardPost.getComments();
+        List<ReadCommentDto> commentsDto = new ArrayList<>();
+        for(Comment comment:comments) {
+            ReadCommentDto readCommentDto =
+//                    new ReadCommentDto(comment.getId(),
+//                            comment.getContent(),
+//                            comment.getLikeCount(),
+//                            comment.getBoardPost().getId(),
+//                            comment.getUser(),
+//                            comment.getCommentDate());
+                    new ReadCommentDto(comment);
+            commentsDto.add(readCommentDto);
+        }
 
         BoardPostReadDto boardPostDto = new BoardPostReadDto(boardPost.getUser(), boardPost.getTitle(),
-                boardPost.getContent(),boardPost.getNoticeBoard(),boardPost.getWriteTime(), imagesURL,comments);
+                boardPost.getContent(),boardPost.getNoticeBoard(),boardPost.getWriteTime(), imagesURL,commentsDto);
 
         return boardPostDto;
     }

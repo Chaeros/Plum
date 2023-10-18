@@ -1,11 +1,13 @@
 package com.springboot.plum.controller;
 
+import com.springboot.plum.config.security.JwtTokenProvider;
 import com.springboot.plum.data.dto.SignInResultDto;
 import com.springboot.plum.data.dto.SignUpResultDto;
 import com.springboot.plum.service.SignService;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +22,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins="*") // 이거 넣어야 CRos 에러 안남
 @Slf4j
 @RequestMapping("/sign-api")
+@RequiredArgsConstructor
 public class SignController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SignController.class);
     private final SignService signService;
-
-    @Autowired
-    public SignController(SignService signService) {
-        this.signService = signService;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping(value = "/sign-in", consumes="application/json;")
     public SignInResultDto signIn(@RequestBody HashMap<String, Object> map){
@@ -63,6 +62,14 @@ public class SignController {
         log.info("[logout] controller");
         signService.logout();
         return ResponseEntity.ok().build();
+    }
+
+    //
+    @GetMapping(value = "/whoareyou")
+    public String whoAreYou(@RequestHeader(value = "Authorization") String token) {
+        log.info("[logout] controller");
+        String userName = jwtTokenProvider.getUsername(token);
+        return userName;
     }
 
     @GetMapping(value = "/exception")
