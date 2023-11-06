@@ -42,5 +42,24 @@
 
 ![image](https://github.com/Chaeros/Plum/assets/91451735/327d8b58-d079-48ca-8f87-78bf7a6c342d)
 
+## 실행 이미지
+로그인 화면
+![image](https://github.com/Chaeros/Plum/assets/91451735/6afde65a-9c0e-478b-8ae1-649aaaebef88)
+<br></br>
 
+회원가입 화면
+![image](https://github.com/Chaeros/Plum/assets/91451735/15af1c10-bab2-4d83-bce5-a2ce9487c684)
+<br></br>
+
+게시판 화면
+![image](https://github.com/Chaeros/Plum/assets/91451735/ce2feaf4-8e3a-459c-9d04-74923bf15ff0)
+<br></br>
+
+글쓰기 화면
+![image](https://github.com/Chaeros/Plum/assets/91451735/f065009c-4ba3-45c5-a0ac-e553e020d183)
+<br></br>
+
+게시글 화면
+![image](https://github.com/Chaeros/Plum/assets/91451735/e3a269c1-bd4c-4e4c-b106-a7a920e0b610)
+<br></br>
 
