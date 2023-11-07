@@ -17,6 +17,19 @@
 데이터베이스 : MySQL<br>
 형상관리 툴 : GitHub<br>
 
+# 기능
+- Spring Security의 jwt와 redis를 통한 로그인/로그아웃
+- 회원 가입
+- 게시글 생성
+   - 다중 이미지 삽입 가능
+   - 작성한 사용자에 한해서 수정 및 삭제 가능
+   - 댓글 작성
+        - 작성한 사용자에 한해서 삭제 가능
+- 게시판 기능
+   - 제목/작성자 입력을 통한 특정 게시글 검색 기능
+   - 페이징 기능
+   - 조회수 출력 기능
+
 
 <h1>DB 설계</h1>
 
@@ -46,23 +59,23 @@
 ![image](https://github.com/Chaeros/Plum/assets/91451735/327d8b58-d079-48ca-8f87-78bf7a6c342d)
 
 ## 실행 이미지
-로그인 화면
+<b>로그인 화면</b>
 ![image](https://github.com/Chaeros/Plum/assets/91451735/6afde65a-9c0e-478b-8ae1-649aaaebef88)
 <br></br>
 
-회원가입 화면
+<b>회원가입 화면</b>
 ![image](https://github.com/Chaeros/Plum/assets/91451735/15af1c10-bab2-4d83-bce5-a2ce9487c684)
 <br></br>
 
-게시판 화면
+<b>게시판 화면</b>
 ![image](https://github.com/Chaeros/Plum/assets/91451735/ce2feaf4-8e3a-459c-9d04-74923bf15ff0)
 <br></br>
 
-글쓰기 화면
+<b>글쓰기 화면</b>
 ![image](https://github.com/Chaeros/Plum/assets/91451735/f065009c-4ba3-45c5-a0ac-e553e020d183)
 <br></br>
 
-게시글 화면
+<b>게시글 화면</b>
 ![image](https://github.com/Chaeros/Plum/assets/91451735/e3a269c1-bd4c-4e4c-b106-a7a920e0b610)
 <br></br>
 
