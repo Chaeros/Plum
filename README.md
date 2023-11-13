@@ -60,22 +60,40 @@
 
 ## 실행 이미지
 <b>로그인 화면</b>
-![image](https://github.com/Chaeros/Plum/assets/91451735/6afde65a-9c0e-478b-8ae1-649aaaebef88)
+![image](https://github.com/Chaeros/Plum/assets/91451735/064e75e0-0246-4382-965f-305b7c804bda)
 <br></br>
+- JWT 토큰을 이용하여 로그인 상태 유지
+- Redis 인메모리 DB를 사용해 토큰 상태 저장
 
 <b>회원가입 화면</b>
-![image](https://github.com/Chaeros/Plum/assets/91451735/15af1c10-bab2-4d83-bce5-a2ce9487c684)
+![image](https://github.com/Chaeros/Plum/assets/91451735/99d8c574-c778-42f4-a622-f9f40f8d6894)
 <br></br>
+- 중복되는 아이디가 존재하면 경고창 출력
+- 공백 입력이 있으면 경고창 출력
 
 <b>게시판 화면</b>
-![image](https://github.com/Chaeros/Plum/assets/91451735/ce2feaf4-8e3a-459c-9d04-74923bf15ff0)
+![image](https://github.com/Chaeros/Plum/assets/91451735/06266ce4-ad2a-42e4-8339-989a87e7c906)
 <br></br>
+- 게시글 클릭 시, 조회수 1 증가
+- 키워드 검색을 통한 특정 게시글 목록 출력
+- 페이징 기능(한 페이지 당 10개의 게시글 출력)
+- 우측 상단의 버튼을 통해 로그아웃 가능
+
+<b>키워드 검색</b>
+![image](https://github.com/Chaeros/Plum/assets/91451735/59703d7f-b117-4da0-8b8f-089e9c488959)
+<br></br>
+- 제목/작성자 카테고리 선택 가능
+- 빈칸 입력 시, 모든 게시글을 불러옴
 
 <b>글쓰기 화면</b>
-![image](https://github.com/Chaeros/Plum/assets/91451735/f065009c-4ba3-45c5-a0ac-e553e020d183)
+![image](https://github.com/Chaeros/Plum/assets/91451735/1dac2cff-bb9c-4e79-9022-588a414c2050)
 <br></br>
+- 다중 이미지 업로드 가능
+- 게시판 선택 가능
 
 <b>게시글 화면</b>
-![image](https://github.com/Chaeros/Plum/assets/91451735/e3a269c1-bd4c-4e4c-b106-a7a920e0b610)
+![image](https://github.com/Chaeros/Plum/assets/91451735/e990e6f2-339a-4c29-8517-4337fc68acf1)
 <br></br>
-
+- 자신이 작성한 게시글의 우측 상단에 게시글 수정/삭제 버튼 출력됨
+- 댓글 기능
+- 자신이 작성한 댓글의 우측에 댓글 삭제 버튼 출력됨
