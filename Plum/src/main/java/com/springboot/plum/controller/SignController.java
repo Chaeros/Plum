@@ -36,8 +36,6 @@ public class SignController {
         LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", id);
         SignInResultDto signInResultDto = signService.signIn(id, password);
 
-
-        // dddd
         if (signInResultDto.getCode() == 0) {
             LOGGER.info("[signIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
                     signInResultDto.getToken());

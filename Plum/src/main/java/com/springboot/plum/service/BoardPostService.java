@@ -8,7 +8,6 @@ import com.springboot.plum.data.dto.UpdateBoardPostDTO;
 import com.springboot.plum.data.entity.*;
 import com.springboot.plum.data.form.BoardAddForm;
 import com.springboot.plum.repository.BoardPostRepository;
-import com.springboot.plum.repository.PostCommentRepository;
 import com.springboot.plum.repository.NoticeBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +31,7 @@ public class BoardPostService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
 
+//    private String imagesFolderName="/images/";
     private String imagesFolderName="/images/";
     public void createPost(HttpServletRequest request,List<MultipartFile> files) throws IOException {
         BoardAddForm boardAddForm = new BoardAddForm(request.getParameter("title"),
@@ -60,12 +59,6 @@ public class BoardPostService {
         List<ReadCommentDto> commentsDto = new ArrayList<>();
         for(Comment comment:comments) {
             ReadCommentDto readCommentDto =
-//                    new ReadCommentDto(comment.getId(),
-//                            comment.getContent(),
-//                            comment.getLikeCount(),
-//                            comment.getBoardPost().getId(),
-//                            comment.getUser(),
-//                            comment.getCommentDate());
                     new ReadCommentDto(comment);
             commentsDto.add(readCommentDto);
         }
