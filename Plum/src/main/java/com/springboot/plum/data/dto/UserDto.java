@@ -10,16 +10,19 @@ public class UserDto {
     private long id;
     private String uid; // 회원 ID (JWT 토큰 내 정보)
     private String name;
+    private String phoneNumber;
 
     public UserDto(User user){
         this.id=user.getId();
         this.uid=user.getUid();
         this.name=user.getName();
+        this.phoneNumber=user.getPhoneNumber();
     }
 
-    public UserDto(long id, String uid, String name) {
+    public UserDto(long id, String uid, String name, String phoneNumber) {
         this.id = id;
         this.uid = uid;
         this.name = name;
+        this.phoneNumber = phoneNumber;
     }
 }
