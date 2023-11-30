@@ -48,7 +48,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String phoneNumber;
 
     @ElementCollection(fetch = FetchType.EAGER)

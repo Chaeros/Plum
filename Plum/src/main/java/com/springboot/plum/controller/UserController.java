@@ -20,10 +20,10 @@ public class UserController {
     private final NormalUserService normalUserService;
 
     // 사용자 정보 읽기(불러오기)
-    @GetMapping("/{user_uid}")
-    public UserDto readPost(@PathVariable String user_uid){
-        log.info("[post read] post_id={}",user_uid);
-        return normalUserService.readUser(user_uid);
+    @GetMapping()
+    public UserDto readUser(@RequestHeader(value = "Authorization") String token){
+        log.info("[post read] readUser");
+        return normalUserService.readUser(token);
     }
 
     // 사용자 정보 수정

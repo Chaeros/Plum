@@ -34,7 +34,7 @@ public class SignServiceImpl implements SignService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public SignUpResultDto signUp(String id, String password, String name, String role) {
+    public SignUpResultDto signUp(String id, String password, String name, String role, String phoneNumber) {
         LOGGER.info("[getSignUpResult] 회원 가입 정보 전달");
         User user;
         if (role.equalsIgnoreCase("admin")) {
@@ -42,6 +42,7 @@ public class SignServiceImpl implements SignService {
                     .uid(id)
                     .name(name)
                     .password(passwordEncoder.encode(password))
+                    .phoneNumber(phoneNumber)
                     .roles(Collections.singletonList("ROLE_ADMIN"))
                     .build();
         } else {
@@ -49,6 +50,7 @@ public class SignServiceImpl implements SignService {
                     .uid(id)
                     .name(name)
                     .password(passwordEncoder.encode(password))
+                    .phoneNumber(phoneNumber)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .build();
         }

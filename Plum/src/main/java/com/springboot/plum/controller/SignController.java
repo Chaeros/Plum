@@ -48,10 +48,11 @@ public class SignController {
         String id=(String)map.get("id");
         String password=(String)map.get("password");
         String name=(String)map.get("name");
+        String phoneNumber=(String)map.get("phoneNumber");
         String role="ROLE_USER";
         LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, name : {}, role : {}", id,
                 name, role);
-        SignUpResultDto signUpResultDto = signService.signUp(id, password, name, role);
+        SignUpResultDto signUpResultDto = signService.signUp(id, password, name, role, phoneNumber);
 
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", id);
         return signUpResultDto;
@@ -64,7 +65,6 @@ public class SignController {
         return ResponseEntity.ok().build();
     }
 
-    //
     @GetMapping(value = "/whoareyou")
     public String whoAreYou(@RequestHeader(value = "Authorization") String token) {
         log.info("[logout] controller");
