@@ -35,6 +35,10 @@
 
 ![image](https://github.com/Chaeros/Plum/assets/91451735/c005c844-c453-4b9b-9c12-9a0e96a5f635)
 
+<br>
+개인의 즐겨찾기 게시판 설정을 위해 MyBoard 테이블 작성
+<br>
+
 ![image](https://github.com/Chaeros/Plum/assets/91451735/bf050d8b-4fce-4923-9040-bae9e82ff1a7)
 
 ![image](https://github.com/Chaeros/Plum/assets/91451735/9bab9244-54df-4ec7-a388-469dbd5b8028)
