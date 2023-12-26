@@ -17,7 +17,7 @@ function UpdateUserCard() {
     let [boardNames,setboardNames]=useState('')
     let temp;
 
-    let [post,setPost]=useState("")
+    let [info,setInfo]=useState("")
 
     useEffect(() => {
         
@@ -31,7 +31,7 @@ function UpdateUserCard() {
         )
         .then((response) => {
             console.log(response)
-            setPost(response.data)
+            setInfo(response.data)
         })
         .catch((error) => {
             // 예외 처리
@@ -89,41 +89,59 @@ function UpdateUserCard() {
       border:'rgb(226,31,136)'
     };
 
+    function UpdateUserFunc(){
+  
+        let sendData = {"category":document.getElementById('category').value,
+                        "title":document.getElementById('title').value,
+                        "content":document.getElementById('content').value}
+       
+        axios.put('http://localhost:8080/user/', sendData, {
+          headers: {
+            withCredentials:true,
+            Authorization: token
+          },
+        })
+        .then((response) => {
+          navigate('/community')
+        })
+        .catch((error) => {
+          // 예외 처리
+          if(error.response.status==401){
+            navigate('/')
+            alert("세션이 만료되어 강제 로그아웃됩니다. 다시 로그인 해주세요.")
+        }
+        })
+      }
+
 
     return (
       <div style={containerStyle} >
         <h1><b>내 정보</b></h1>
         
-        <p></p>
+        <p>아이디 : {info && info.uid}</p>
+        <p>닉네임 : {info && info.name}</p>
+        <p>전화번호 : {info && info.phoneNumber}</p>
 
 
-          <FloatingLabel
-          style={sizeStyle}
-            controlId="title"
-            label="제목"
-            className="mb-3"
-          >
-            <Form.Control as="textarea" placeholder="Leave a comment here" defaultValue={post.title}/>
+          <FloatingLabel style={sizeStyle} controlId="originPassword" label="기존 비밀번호">
+            <Form.Control as="textarea"/>
           </FloatingLabel>
-          <FloatingLabel style={sizeStyle} controlId="content" label="내용">
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a comment here"
-              style={{ height: '100px' }}
-              defaultValue={post.content}
-            />
+          <br></br>
+
+          <FloatingLabel style={sizeStyle} controlId="content" label="변경할 비밀번호">
+            <Form.Control as="textarea"/>
+          </FloatingLabel>
+          <br></br>
+
+          <FloatingLabel style={sizeStyle} controlId="content" label="변경할 비밀번호 재확인">
+            <Form.Control as="textarea"/>
           </FloatingLabel>
 
-          <Form.Group controlId="formFileMultiple" className="mb-3">
-            <Form.Label>수정의 경우 이미지를 변경할 수 없습니다.</Form.Label>
-            {/* <Form.Label>여러개의 이미지를 삽입하려면 드래그 및 컨트롤 클릭으로 다중 선택해주세요!</Form.Label> */}
-            {/* <Form.Control type="file" accept=".jpg,.png,.jpeg" onChange={handleChangeFile} multiple val={images}/> */}
-          </Form.Group>
-
+        <br></br>
           <div>
           <button 
             style={Object.assign({},{ width: '200px', height: '50px'}, buttonColorStyle)}
-            // onClick={()=> Send()}
+            onClick={()=> UpdateUserFunc()}
              class="btn write-button btn-primary">수정하기</button>
           </div>
           

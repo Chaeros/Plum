@@ -2,6 +2,7 @@ package com.springboot.plum.controller;
 
 import com.springboot.plum.data.dto.BoardPostReadDto;
 import com.springboot.plum.data.dto.UpdateBoardPostDTO;
+import com.springboot.plum.data.dto.UpdateUserDTO;
 import com.springboot.plum.data.dto.UserDto;
 import com.springboot.plum.repository.NormalUserRepository;
 import com.springboot.plum.service.BoardPostService;
@@ -27,11 +28,9 @@ public class UserController {
     }
 
     // 사용자 정보 수정
-//    @PutMapping("/{user_uid}")
-//    public void updadtePost(@RequestBody UpdateBoardPostDTO updateBoardPostDTO,
-//                            @PathVariable long user_uid){
-//        log.info("[post update] post_id={}",user_uid);
-//        boardPostService.updatePost(updateBoardPostDTO,user_uid);
-//    }
+    @PutMapping()
+    public void updadtePost(@RequestBody UpdateUserDTO updateUserDTO){
+        log.info("[post update] updateUser");
+    }
 
 }
